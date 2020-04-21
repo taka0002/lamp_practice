@@ -16,10 +16,12 @@ function get_db_connect(){
   return $dbh;
 }
 
+//一行だけデータを取得
 function fetch_query($db, $sql, $params = array()){
   try{
     $statement = $db->prepare($sql);
     $statement->execute($params);
+    //返り値は一行だけ取得
     return $statement->fetch();
   }catch(PDOException $e){
     set_error('データ取得に失敗しました。');
@@ -27,10 +29,12 @@ function fetch_query($db, $sql, $params = array()){
   return false;
 }
 
+//すべての結果行のデータを取得
 function fetch_all_query($db, $sql, $params = array()){
   try{
     $statement = $db->prepare($sql);
     $statement->execute($params);
+    //返り値はすべての行を取得
     return $statement->fetchAll();
   }catch(PDOException $e){
     set_error('データ取得に失敗しました。');
@@ -41,6 +45,7 @@ function fetch_all_query($db, $sql, $params = array()){
 function execute_query($db, $sql, $params = array()){
   try{
     $statement = $db->prepare($sql);
+    //SQLを実行した値を返す
     return $statement->execute($params);
   }catch(PDOException $e){
     set_error('更新に失敗しました。');

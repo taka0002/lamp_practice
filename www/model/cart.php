@@ -1,7 +1,9 @@
 <?php 
+//設定ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'db.php';
 
+//get_user_carts関数の定義
 function get_user_carts($db, $user_id){
   $sql = "
     SELECT
@@ -26,6 +28,7 @@ function get_user_carts($db, $user_id){
   return fetch_all_query($db, $sql);
 }
 
+//get_user_cart関数の定義
 function get_user_cart($db, $user_id, $item_id){
   $sql = "
     SELECT
@@ -54,6 +57,7 @@ function get_user_cart($db, $user_id, $item_id){
 
 }
 
+//add_cart関数の定義
 function add_cart($db, $user_id, $item_id ) {
   $cart = get_user_cart($db, $user_id, $item_id);
   if($cart === false){
@@ -76,6 +80,7 @@ function insert_cart($db, $user_id, $item_id, $amount = 1){
   return execute_query($db, $sql);
 }
 
+//update_cart_amount関数の定義
 function update_cart_amount($db, $cart_id, $amount){
   $sql = "
     UPDATE
@@ -89,6 +94,7 @@ function update_cart_amount($db, $cart_id, $amount){
   return execute_query($db, $sql);
 }
 
+//delete_cart関数の定義
 function delete_cart($db, $cart_id){
   $sql = "
     DELETE FROM
@@ -101,6 +107,7 @@ function delete_cart($db, $cart_id){
   return execute_query($db, $sql);
 }
 
+//purchase_carts関数の定義
 function purchase_carts($db, $carts){
   if(validate_cart_purchase($carts) === false){
     return false;
@@ -118,6 +125,7 @@ function purchase_carts($db, $carts){
   delete_user_carts($db, $carts[0]['user_id']);
 }
 
+//delete_user_carts関数の定義
 function delete_user_carts($db, $user_id){
   $sql = "
     DELETE FROM
@@ -129,7 +137,7 @@ function delete_user_carts($db, $user_id){
   execute_query($db, $sql);
 }
 
-
+//sum_carts関数の定義
 function sum_carts($carts){
   $total_price = 0;
   foreach($carts as $cart){
@@ -138,6 +146,7 @@ function sum_carts($carts){
   return $total_price;
 }
 
+//validate_cart_purchase関数の定義
 function validate_cart_purchase($carts){
   if(count($carts) === 0){
     set_error('カートに商品が入っていません。');

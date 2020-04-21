@@ -16,7 +16,7 @@ function get_get($name){
   };
   return '';
 }
-
+//postで受け取った値
 function get_post($name){
   if(isset($_POST[$name]) === true){
     return $_POST[$name];
