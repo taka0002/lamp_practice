@@ -6,35 +6,35 @@ require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 
 session_start();
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-   //login_URLにリダイレクト
+   //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 //DB接続
 $db = get_db_connect();
 
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
 
-//リクエストページが管理者ページではないとき
+//$user['type']がUSER_TYPE_ADMIN(1)ではないとき
 if(is_admin($user) === false){
-  //LOGIN＿URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 
-//nameの情報をデータベースから返す
+//postで受け取ったnameを定義
 $name = get_post('name');
-//priceの情報をデータベースから返す
+//postで受け取ったpriceを定義
 $price = get_post('price');
-//statusの情報をデータベースから返す
+//postで受け取ったstatusを定義
 $status = get_post('status');
-//stockの情報をデータベースから返す
+//postで受け取ったstockを定義
 $stock = get_post('stock');
-//imageの情報をデータベースから返す
+//postで受け取ったimageを定義
 $image = get_file('image');
 
-//それぞれの情報をregistしたとき
+//regist_item_transaction関数により、itemsテーブルに商品が登録されて、画像が保存されたとき
 if(regist_item($db, $name, $price, $stock, $status, $image)){
   //メッセージ表示
   set_message('商品を登録しました。');
@@ -43,5 +43,5 @@ if(regist_item($db, $name, $price, $stock, $status, $image)){
   set_error('商品の登録に失敗しました。');
 }
 
-
+//管理画面にリダイレクト
 redirect_to(ADMIN_URL);

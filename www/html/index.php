@@ -7,18 +7,18 @@ require_once '../model/item.php';
 
 session_start();
 
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-  //login_URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 
 //DB接続
 $db = get_db_connect();
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
 
-//itemsの一覧を表示
+//statusが1のitemsの商品をselectしたものを定義
 $items = get_open_items($db);
 
 //外部ファイル(/index_view.php)がすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）

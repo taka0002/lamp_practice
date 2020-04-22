@@ -8,22 +8,22 @@ require_once MODEL_PATH . 'cart.php';
 
 session_start();
 
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-  //login_URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 
 //DB接続
 $db = get_db_connect();
 
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
 
-//cart_idの情報をデータベースから返す
+//postで受け取ったcart_idを定義
 $cart_id = get_post('cart_id');
 
-//cart_idがdeleteされたとき
+//cartsテーブルから商品がdeleteされたとき(条件：cart_id)
 if(delete_cart($db, $cart_id)){
   //メッセージ表示
   set_message('カートを削除しました。');
@@ -32,4 +32,5 @@ if(delete_cart($db, $cart_id)){
   set_error('カートの削除に失敗しました。');
 }
 
+//カートページへリダイレクト
 redirect_to(CART_URL);

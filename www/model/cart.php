@@ -1,5 +1,4 @@
 <?php 
-//設定ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'db.php';
 
@@ -146,7 +145,7 @@ function sum_carts($carts){
   return $total_price;
 }
 
-//validate_cart_purchase関数の定義
+//sum_carts関数の定義
 function validate_cart_purchase($carts){
   if(count($carts) === 0){
     set_error('カートに商品が入っていません。');

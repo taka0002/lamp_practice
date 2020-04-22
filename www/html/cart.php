@@ -8,19 +8,19 @@ require_once MODEL_PATH . 'cart.php';
 
 session_start();
 
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-  //login_URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 
 //DB接続
 $db = get_db_connect();
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
-//cart_idの一覧を取得
+//ユーザーidを条件にして、cartsテーブルにある商品情報を取得したものを定義(itemsテーブルを結合)
 $carts = get_user_carts($db, $user['user_id']);
-//cartsの合計額を取得
+//cartsの合計額を取得したものを定義
 $total_price = sum_carts($carts);
 
 //外部ファイル(/cart_view.php)がすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）

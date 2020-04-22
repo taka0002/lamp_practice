@@ -7,26 +7,26 @@ require_once MODEL_PATH . 'item.php';
 
 session_start();
 
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-  //login_URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 //DB接続
 $db = get_db_connect();
 
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselect
 $user = get_login_user($db);
 
-//リクエストページが管理者ページではないとき
+//$user['type']がUSER_TYPE_ADMIN(1)ではないとき
 if(is_admin($user) === false){
-  //LOGIN＿URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
-//item_idの情報をデータベースから返す
+//postで受け取ったitem_idを定義
 $item_id = get_post('item_id');
 
-//changes_toの情報をデータベースから返す
+//postで受け取ったchanges_toを定義
 $stock = get_post('stock');
 
 //データベースのitem_idのstockがアップデートされたとき
@@ -37,5 +37,5 @@ if(update_item_stock($db, $item_id, $stock)){
   //エラーメッセージ表示
   set_error('在庫数の変更に失敗しました。');
 }
-
+//管理画面へリダイレクト
 redirect_to(ADMIN_URL);

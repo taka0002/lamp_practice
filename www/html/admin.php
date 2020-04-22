@@ -6,24 +6,24 @@ require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 
 session_start();
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-  //login_URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 //DB接続
 $db = get_db_connect();
 
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
 
-//リクエストページが管理者ページではないとき
+//$user['type']がUSER_TYPE_ADMIN(1)ではないとき
 if(is_admin($user) === false){
-  //LOGIN＿URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
-
+//itemsテーブルにある商品をセレクト
 $items = get_all_items($db);
 
-//外部ファイルがすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）
+//外部ファイル(/admin_view.php)がすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）
 include_once VIEW_PATH . '/admin_view.php';

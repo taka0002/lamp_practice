@@ -6,6 +6,7 @@ require_once MODEL_PATH . 'functions.php';
 session_start();
 
 $_SESSION = array();
+//セッションクッキーのパラメータを取得
 $params = session_get_cookie_params();
 //クッキーを定義
 setcookie(session_name(), '', time() - 42000,

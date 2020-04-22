@@ -6,27 +6,27 @@ require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 
 session_start();
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-  //login_URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 //DB接続
 $db = get_db_connect();
 
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
 
-//リクエストページが管理者ページではないとき
+//$user['type']がUSER_TYPE_ADMIN(1)ではないとき
 if(is_admin($user) === false){
-  //LOGIN＿URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 
-//item_idの情報をデータベースから返す
+//postで受け取ったitem_idを定義
 $item_id = get_post('item_id');
 
-//dbのitem_idがdestoryされたとき
+//destory_itemの返り値がtrueだったときトランザクションでitemsテーブルからアイテムと画像を削除
 if(destroy_item($db, $item_id) === true){
   //メッセージ表示
   set_message('商品を削除しました。');
@@ -36,5 +36,5 @@ if(destroy_item($db, $item_id) === true){
 }
 
 
-
+//管理画面へリダイレクト
 redirect_to(ADMIN_URL);

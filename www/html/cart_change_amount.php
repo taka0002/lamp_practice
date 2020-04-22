@@ -7,22 +7,22 @@ require_once MODEL_PATH . 'item.php';
 require_once MODEL_PATH . 'cart.php';
 
 session_start();
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-  //login_URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 //DB接続
 $db = get_db_connect();
 
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
-//cart_idの情報をデータベースから返す
+//postで受け取ったcart_idを定義
 $cart_id = get_post('cart_id');
-//amountの情報をデータベースから返す
+//postで受け取ったamountを定義
 $amount = get_post('amount');
 
-//cart_amountをアップデートしたとき
+//cartsテーブルの数量をアップデートしたとき(cart_idで条件絞る)
 if(update_cart_amount($db, $cart_id, $amount)){
   //メッセージ表示
   set_message('購入数を更新しました。');
@@ -31,4 +31,5 @@ if(update_cart_amount($db, $cart_id, $amount)){
   set_error('購入数の更新に失敗しました。');
 }
 
+//カートページへリダイレクト
 redirect_to(CART_URL);

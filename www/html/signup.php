@@ -4,7 +4,7 @@ require_once '../conf/const.php';
 require_once MODEL_PATH . 'functions.php';
 
 session_start();
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === true){
   //index.phpにリダイレクト
   redirect_to(HOME_URL);

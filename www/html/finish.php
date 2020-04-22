@@ -8,21 +8,21 @@ require_once MODEL_PATH . 'cart.php';
 
 session_start();
 
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-  //login_URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 
 //DB接続
 $db = get_db_connect();
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
 
-//cart_idの一覧を取得
+//ユーザーidを条件にして、cartsテーブルにある商品情報を取得したものを定義(itemsテーブルを結合)
 $carts = get_user_carts($db, $user['user_id']);
 
-//購入ボタンを押したときにfalseだった場合
+//itemsテーブルの在庫数をアップデートしてcartsテーブルの商品を削除できなかったとき
 if(purchase_carts($db, $carts) === false){
   //エラーメッセージ表示
   set_error('商品が購入できませんでした。');

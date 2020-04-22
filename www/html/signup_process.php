@@ -5,22 +5,22 @@ require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'user.php';
 
 session_start();
-//ログインがtrueだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === true){
-  //index.phpにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(HOME_URL);
 }
-//nameを取得
+//postで受け取ったnameを定義
 $name = get_post('name');
-//passwordを取得
+//postで受け取ったpasswordを定義
 $password = get_post('password');
-//passwordの確認
+//postで受け取ったpassword_confirmationを定義
 $password_confirmation = get_post('password_confirmation');
 //db接続
 $db = get_db_connect();
 
 try{
-  //regist_userを定義
+  //regist_user関数を定義(nameとpasswordが規定内のものになっている)
   $result = regist_user($db, $name, $password, $password_confirmation);
 
   if( $result=== false){
@@ -35,7 +35,7 @@ try{
 }
 //メッセージ表示
 set_message('ユーザー登録が完了しました。');
-//入力されたnameとpasswordでログイン
+//nameを条件にしたユーザー情報をselect
 login_as($db, $name, $password);
 //index.phpへリダイレクト
 redirect_to(HOME_URL);

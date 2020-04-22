@@ -8,21 +8,21 @@ require_once MODEL_PATH . 'cart.php';
 
 session_start();
 
-//ログインがfalseだったとき
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
-  //login_URLにリダイレクト
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 
 //DB接続
 $db = get_db_connect();
-//ユーザーの一覧を取得
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
 
-//item_idを取得
+//postで受け取ったitem?_idを取得
 $item_id = get_post('item_id');
 
-//cartに追加されたとき
+//cartsテーブルに商品をinsertもしくはアップデートしたとき
 if(add_cart($db,$user['user_id'], $item_id)){
   //メッセージ表示
   set_message('カートに商品を追加しました。');
@@ -30,5 +30,5 @@ if(add_cart($db,$user['user_id'], $item_id)){
   //エラーメッセージ表示
   set_error('カートの更新に失敗しました。');
 }
-//HOME_UR（index.php）Lへリダイレクト
+//HOME_UR（index.php）へリダイレクト
 redirect_to(HOME_URL);
