@@ -100,7 +100,7 @@ function update_cart_amount($db, $cart_id, $amount){
   $statement->bindValue(1, $amount, PDO::PARAM_INT);
   $statement->bindValue(2, $cart_id, PDO::PARAM_INT);
 
-  $statement->execute();
+  return execute_query($db, $sql);
 
   } catch(PDOException $e) {
 
@@ -108,7 +108,6 @@ function update_cart_amount($db, $cart_id, $amount){
 
   }
 
-  return execute_query($db, $sql);
 }
 
 //delete_cart関数の定義
