@@ -99,8 +99,9 @@ function update_cart_amount($db, $cart_id, $amount){
   // SQL文のプレースホルダに値をバインド
   $statement->bindValue(1, $amount, PDO::PARAM_INT);
   $statement->bindValue(2, $cart_id, PDO::PARAM_INT);
-
-  return execute_query($db, $sql);
+  
+  //SQl文を実行
+  return $statement->execute();
 
   } catch(PDOException $e) {
 
