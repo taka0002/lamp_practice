@@ -93,8 +93,6 @@ function update_cart_amount($db, $cart_id, $amount){
       cart_id = ?
     LIMIT 1
   ";
-  //SQLを実行する準備
-  $statement = $db->prepare($sql);
 
   // SQL文のプレースホルダに値をバインド
   $statement->bindValue(1, $amount, PDO::PARAM_INT);
