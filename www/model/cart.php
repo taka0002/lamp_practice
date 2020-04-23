@@ -81,7 +81,10 @@ function insert_cart($db, $user_id, $item_id, $amount = 1){
 
 //update_cart_amount関数の定義
 function update_cart_amount($db, $cart_id, $amount){
-  $sql = "
+
+  try  {
+
+    $sql = "
     UPDATE
       carts
     SET
@@ -99,6 +102,12 @@ function update_cart_amount($db, $cart_id, $amount){
 
   //SQLを実行
   $stmt->execute();
+
+  } catch(PDOException $e) {
+
+    throw $e;
+
+  }
 
   return execute_query($db, $sql);
 }
