@@ -1,7 +1,9 @@
 <?php
+//設定ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'db.php';
 
+//ユーザー情報を取得
 function get_user($db, $user_id){
   $sql = "
     SELECT
@@ -19,6 +21,7 @@ function get_user($db, $user_id){
   return fetch_query($db, $sql);
 }
 
+//nameで条件を絞った関数
 function get_user_by_name($db, $name){
   $sql = "
     SELECT

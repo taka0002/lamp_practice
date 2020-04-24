@@ -1,10 +1,14 @@
 <?php
+//設定ファイルを読み込み
 require_once '../conf/const.php';
 require_once MODEL_PATH . 'functions.php';
 
 session_start();
+
 $_SESSION = array();
+//セッションクッキーのパラメータを取得
 $params = session_get_cookie_params();
+//クッキーを定義
 setcookie(session_name(), '', time() - 42000,
   $params["path"], 
   $params["domain"],
@@ -13,5 +17,6 @@ setcookie(session_name(), '', time() - 42000,
 );
 session_destroy();
 
+//ログインページへリダイレクト
 redirect_to(LOGIN_URL);
 

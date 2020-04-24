@@ -1,4 +1,5 @@
 <?php
+//設定ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'db.php';
 
@@ -19,6 +20,7 @@ function get_item($db, $item_id){
       item_id = {$item_id}
   ";
 
+  //返り値は1行だけ
   return fetch_query($db, $sql);
 }
 
@@ -40,6 +42,7 @@ function get_items($db, $is_open = false){
     ';
   }
 
+  //返り値はすべての行
   return fetch_all_query($db, $sql);
 }
 

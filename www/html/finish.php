@@ -1,4 +1,5 @@
 <?php
+//設定ファイルを読み込み
 require_once '../conf/const.php';
 require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'user.php';
@@ -7,20 +8,30 @@ require_once MODEL_PATH . 'cart.php';
 
 session_start();
 
+//セッション変数からログイン済みか確認
 if(is_logined() === false){
+  //login.phpにリダイレクト
   redirect_to(LOGIN_URL);
 }
 
+//DB接続
 $db = get_db_connect();
+//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
 $user = get_login_user($db);
 
+//ユーザーidを条件にして、cartsテーブルにある商品情報を取得したものを定義(itemsテーブルを結合)
 $carts = get_user_carts($db, $user['user_id']);
 
+//itemsテーブルの在庫数をアップデートしてcartsテーブルの商品を削除できなかったとき
 if(purchase_carts($db, $carts) === false){
+  //エラーメッセージ表示
   set_error('商品が購入できませんでした。');
+  //cartページにリダイレクト
   redirect_to(CART_URL);
 } 
 
+//cartsの合計額を定義
 $total_price = sum_carts($carts);
 
+//外部ファイル(../view/finish_view.php)がすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）
 include_once '../view/finish_view.php';
