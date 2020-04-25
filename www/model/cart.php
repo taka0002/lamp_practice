@@ -73,16 +73,14 @@ function insert_cart($db, $user_id, $item_id, $amount = 1){
         user_id,
         amount
       )
-    VALUES({$item_id}, {$user_id}, {$amount})
+    VALUES(?, ?, ?)
   ";
 
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, array($item_id, $user_id, $amount));
 }
 
 //update_cart_amount関数の定義
 function update_cart_amount($db, $cart_id, $amount){
-
-  try  {
 
     $sql = "
     UPDATE
@@ -94,21 +92,7 @@ function update_cart_amount($db, $cart_id, $amount){
     LIMIT 1
   ";
   
-  //SQLを実行する準備
-  $statement = $db->prepare($sql);
-
-  // SQL文のプレースホルダに値をバインド
-  $statement->bindValue(1, $amount, PDO::PARAM_INT);
-  $statement->bindValue(2, $cart_id, PDO::PARAM_INT);
-
-  //SQl文を実行
-  return $statement->execute();
-
-  } catch(PDOException $e) {
-
-    throw $e;
-
-  }
+  return execute_query($db, $sql, array($amount, $cart_id));
 
 }
 
@@ -118,11 +102,11 @@ function delete_cart($db, $cart_id){
     DELETE FROM
       carts
     WHERE
-      cart_id = {$cart_id}
+      cart_id = ?
     LIMIT 1
   ";
 
-  return execute_query($db, $sql);
+  return execute_query($db, $sql, array($cart_id));
 }
 
 //purchase_carts関数の定義
@@ -149,10 +133,10 @@ function delete_user_carts($db, $user_id){
     DELETE FROM
       carts
     WHERE
-      user_id = {$user_id}
+      user_id = ?
   ";
 
-  execute_query($db, $sql);
+  execute_query($db, $sql, array($user_id));
 }
 
 //sum_carts関数の定義
