@@ -21,5 +21,8 @@ $user = get_login_user($db);
 //statusが1のitemsの商品をselectしたものを定義
 $items = get_open_items($db);
 
+//トークンの作成
+$token = get_csrf_token();
+
 //外部ファイル(/index_view.php)がすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）
 include_once VIEW_PATH . 'index_view.php';

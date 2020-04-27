@@ -11,6 +11,18 @@ if(is_logined() === true){
   //login.phpにリダイレクト
   redirect_to(HOME_URL);
 }
+
+//postで受け取ったcsrf_tokenを定義
+$token = get_post("csrf_token");
+
+//postで受け取った値とセッション変数で受け取った値が一致しているかチェックする必要がある
+if(is_valid_csrf_token($token) === FALSE) {
+
+  redirect_to(LOGIN_URL);
+
+}
+set_session('csrf_token', '');
+
 //postで受け取ったnameを定義
 $name = get_post('name');
 //postで受け取ったpasswordを定義
@@ -38,3 +50,6 @@ if ($user['type'] === USER_TYPE_ADMIN){
 }
 //ホーム画面へリダイレクト
 redirect_to(HOME_URL);
+
+
+?>

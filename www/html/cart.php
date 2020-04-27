@@ -23,5 +23,10 @@ $carts = get_user_carts($db, $user['user_id']);
 //cartsの合計額を取得したものを定義
 $total_price = sum_carts($carts);
 
+//トークンの作成
+$token = get_csrf_token();
+
 //外部ファイル(/cart_view.php)がすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）
 include_once VIEW_PATH . 'cart_view.php';
+
+?>
