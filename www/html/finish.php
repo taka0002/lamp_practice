@@ -8,21 +8,32 @@ require_once MODEL_PATH . 'cart.php';
 
 session_start();
 
-//セッション変数からログイン済みか確認
+//ログインがfalseだったとき
 if(is_logined() === false){
-  //login.phpにリダイレクト
+  //login_URLにリダイレクト
   redirect_to(LOGIN_URL);
 }
 
+//postで受け取ったcsrf_tokenを定義
+$token = get_post("csrf_token");
+
+//postで受け取った値とセッション変数で受け取った値が一致しているかチェックする必要がある
+if(is_valid_csrf_token($token) === FALSE) {
+
+  redirect_to(LOGIN_URL);
+
+}
+set_session('csrf_token', '');
+
 //DB接続
 $db = get_db_connect();
-//ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
+//ユーザーの一覧を取得
 $user = get_login_user($db);
 
-//ユーザーidを条件にして、cartsテーブルにある商品情報を取得したものを定義(itemsテーブルを結合)
+//cart_idの一覧を取得
 $carts = get_user_carts($db, $user['user_id']);
 
-//itemsテーブルの在庫数をアップデートしてcartsテーブルの商品を削除できなかったとき
+//購入ボタンを押したときにfalseだった場合
 if(purchase_carts($db, $carts) === false){
   //エラーメッセージ表示
   set_error('商品が購入できませんでした。');
@@ -30,8 +41,9 @@ if(purchase_carts($db, $carts) === false){
   redirect_to(CART_URL);
 } 
 
-//cartsの合計額を定義
 $total_price = sum_carts($carts);
 
-//外部ファイル(../view/finish_view.php)がすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）
+//外部ファイル(/cart_view.php)がすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）
 include_once '../view/finish_view.php';
+
+?>

@@ -14,6 +14,17 @@ if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
 
+//postで受け取ったcsrf_tokenを定義
+$token = get_post("csrf_token");
+
+//postで受け取った値とセッション変数で受け取った値が一致しているかチェックする必要がある
+if(is_valid_csrf_token($token) === FALSE) {
+
+  redirect_to(LOGIN_URL);
+
+}
+set_session('csrf_token', '');
+
 //DB接続
 $db = get_db_connect();
 //ユーザーidを条件にしてuser_id、name、password、typeをselectしたものを定義
@@ -32,3 +43,7 @@ if(add_cart($db,$user['user_id'], $item_id)){
 }
 //HOME_UR（index.php）へリダイレクト
 redirect_to(HOME_URL);
+
+
+
+?>
