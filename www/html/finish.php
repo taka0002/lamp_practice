@@ -41,7 +41,9 @@ if(purchase_carts($db, $carts) === false){
   redirect_to(CART_URL);
 } 
 
+
 $total_price = sum_carts($carts);
+
 
 //外部ファイル(/cart_view.php)がすでに読み込まれているか、チェック（1回目は正常に読み込むが、2回目以降は読み込まない）
 include_once '../view/finish_view.php';

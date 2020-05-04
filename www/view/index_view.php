@@ -8,7 +8,7 @@
 </head>
 <body>
   <?php include VIEW_PATH . 'templates/header_logined.php'; ?>
-  
+  <a href="history.php">購入履歴はこちらから</a>
 
   <div class="container">
     <h1>商品一覧</h1>
