@@ -57,7 +57,7 @@ function get_user_cart($db, $user_id, $item_id){
 }
 
 //add_cart関数の定義
-function add_cart($db, $user_id, $item_id ) {
+function add_cart($db, $user_id, $item_id) {
   $cart = get_user_cart($db, $user_id, $item_id);
   if($cart === false){
     return insert_cart($db, $user_id, $item_id);
@@ -123,7 +123,11 @@ function purchase_carts($db, $carts){
       set_error($cart['name'] . 'の購入に失敗しました。');
     }
   }
-  
+  insert_history($db, $carts[0]['user_id']);
+  $history_id = $db->lastInsertId();
+  foreach($carts as $cart) {
+    insert_details($db, $cart['item_id'], $history_id, $cart['price'], $cart['amount']);
+  }
   delete_user_carts($db, $carts[0]['user_id']);
 }
 
@@ -168,3 +172,77 @@ function validate_cart_purchase($carts){
   return true;
 }
 
+//insert_history関数の定義(購入履歴)
+function insert_history($db, $user_id) {
+  $sql = "
+    INSERT INTO
+      history(
+        user_id
+      )
+    VALUES(?)
+  ";
+
+  return execute_query($db, $sql, array($user_id));
+}
+
+//insert_details関数の定義(購入明細)
+function insert_details($db, $item_id, $history_id, $price, $amount) {
+  $sql = "
+    INSERT INTO
+      details(
+        item_id,
+        history_id,
+        price,
+        amount
+      )
+    VALUES(?, ?, ?, ?)
+  ";
+
+return execute_query($db, $sql, array($item_id, $history_id, $price, $amount));
+}
+
+//get_history関数の定義
+function get_history($db, $user_id = 4) {
+  if($user_id !== 4){
+    $where = " WHERE history.user_id = {$user_id}";
+  } else {
+    $where = "";
+  }
+  $sql = "
+  SELECT
+    history.history_id,
+    history.created,
+    SUM(details.price * details.amount) as total_price
+  FROM
+    history
+  JOIN
+    details
+  ON
+    history.history_id = details.history_id
+  {$where}
+  GROUP BY
+    history_id
+  ORDER BY
+    created DESC";
+
+  return fetch_all_query($db, $sql);
+}
+
+//get_details関数の定義
+function get_details($db, $history_id) {
+  $sql = "
+  SELECT
+    details.price,
+    details.amount,
+    items.name
+  FROM
+    details
+  JOIN
+    items
+  ON
+    details.item_id = items.item_id
+  WHERE
+    details.history_id = {$history_id}";
+    
+  return fetch_all_query($db, $sql);
+}
