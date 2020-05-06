@@ -34,8 +34,6 @@ $total_price =  get_post('total_price');
 
 $details = get_details($db, $history_id);
 
-$history = get_history($db, $user['user_id']);
-
 //トークンの作成
 $token = get_csrf_token();
 
