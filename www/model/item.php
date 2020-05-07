@@ -38,8 +38,7 @@ function get_items($db, $is_open = false){
   ';
   if($is_open === true){
     $sql .= '
-      WHERE status = 1
-    ';
+      WHERE status = 1';
   }
 
   //返り値はすべての行

@@ -49,3 +49,6 @@ define('PERMITTED_IMAGE_TYPES', array(
   IMAGETYPE_JPEG => 'jpg',
   IMAGETYPE_PNG => 'png',
 ));
+
+// 1ページの記事の表示数
+define('MAX','8'); 

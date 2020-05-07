@@ -1,4 +1,12 @@
 .item {
   margin-top: 10px;
 }
+.pagi_nation {
+  font-size:24px;
+  margin: 10px auto 20px;
+  clear:both;
+}
 
+.current_page {
+  color: #ff0000;
+}
